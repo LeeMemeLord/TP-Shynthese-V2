@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 public class GUIClient extends ChatClient {
     JFrame frame;
     JTextArea chatBox;
+
+    JButton envoyerButton;
     JTextField sendBox;
     GUIClient.ConnexionDialog connexion;
 
@@ -39,11 +41,28 @@ public class GUIClient extends ChatClient {
            Fiez-vous aux captures d'écran pour voir le résultat attendu.
          */
 
+        sendBox = new JTextField();
+        envoyerButton = new JButton("Envoyer");
+        JPanel panelBouton = new JPanel(new BorderLayout());
+        panelBouton.add(sendBox, BorderLayout.CENTER);
+        panelBouton.add(envoyerButton, BorderLayout.EAST);
+
+        frame.add(panelBouton,BorderLayout.SOUTH);
+
         /* TODO 13: Ajoutez une action au bouton "Envoyer" qui va lui permettre
              a) d'envoyer le message au serveur (appelez la méthode send(String message)),
              b) d'ajouter le texte du message au textArea 'chatBox' (créé ci-dessus),
              c) de vider le contenu du textField 'sendBox' (que vous avez créé au TODO précédent).
         */
+        envoyerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String message = userName + ": "+sendBox.getText();
+                send(message);
+                chatBox.append(message + "\n");
+                sendBox.setText("");
+            }
+        });
 
         frame.setVisible(true);
     }

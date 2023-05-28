@@ -45,7 +45,17 @@ public class Historique {
             depuis le fichier passé en paramètre, et de remplir le tableau 'messages' avec les objets
             'Message' créés.
         */
-        System.out.printf("Lecture de l'historique depuis %s (%d lignes)\n", cheminFichier, nbMessagesLus);
+        try (BufferedReader reader = new BufferedReader(new FileReader(cheminFichier))) {
+            String ligne;
+            while ((ligne = reader.readLine()) != null) {
+                Message message = new MessageEntrant(ligne);
+                messages.add(message);
+                nbMessagesLus++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return nbMessagesLus;
     }
 
@@ -54,7 +64,18 @@ public class Historique {
         /* TODO 14: Ajoutez le code nécessaire pour permettre d'écrire chaque message (un par ligne)
             dans le fichier passé en paramètre à partir des messages contenus dans le tableau 'messages'.
         */
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(cheminFichier))) {
+            for (Message message : messages) {
+                writer.write(message.toString());
+                writer.newLine();
+                nbMessagesEcrits++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         System.out.printf("Écriture de l'historique terminée dans %s (%d lignes)\n", cheminFichier, nbMessagesEcrits);
         return nbMessagesEcrits;
+
     }
 }
